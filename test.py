@@ -20,14 +20,14 @@ if __name__ == '__main__':
                         help='set log tag')
     parser.add_argument('--output-path', type=str, nargs='?',
                         default='./predictions', help='results output dir')
-    parser.add_argument('-b', '--single-batch-size', type=int, nargs='?', default=2,
+    parser.add_argument('-b', '--single-batch-size', type=int, nargs='?', default=1,
                         help='set batch size for each gpu')
     parser.add_argument('-v', '--vis', type=bool, nargs='?', default=False,
                         help='set the flag to True if dumping visualizations')
     args = parser.parse_args()
 
     dataset_dir = cfg.DATA_DIR
-    val_dir = os.path.join(cfg.DATA_DIR, 'validation')
+    val_dir = os.path.join(cfg.DATA_DIR, 'training')
     save_model_dir = os.path.join('./save_model', args.tag)
     
     # create output folder
@@ -39,11 +39,11 @@ if __name__ == '__main__':
 
     with tf.Graph().as_default():
 
-        gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=cfg.GPU_MEMORY_FRACTION,
+        gpu_options = tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=cfg.GPU_MEMORY_FRACTION,
                             visible_device_list=cfg.GPU_AVAILABLE,
                             allow_growth=True)
     
-        config = tf.ConfigProto(
+        config = tf.compat.v1.ConfigProto(
             gpu_options=gpu_options,
             device_count={
                 "GPU": cfg.GPU_USE_COUNT,
@@ -51,7 +51,7 @@ if __name__ == '__main__':
             allow_soft_placement=True,
         )
 
-        with tf.Session(config=config) as sess:
+        with tf.compat.v1.Session(config=config) as sess:
             model = RPN3D(
                 cls=cfg.DETECT_OBJ,
                 single_batch_size=args.single_batch_size,

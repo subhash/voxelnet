@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.misc import imread
+from matplotlib.pyplot import imread
 
 CAM = 2
 
@@ -79,20 +79,20 @@ def align_img_and_pc(img_dir, pc_dir, calib_dir):
     return points
 
 # update the following directories
-IMG_ROOT = '/media/hdc/KITTI/image/training/image_2/'
-PC_ROOT = '/media/hdc/KITTI/point_cloud/raw_bin_files/training/velodyne/'
-CALIB_ROOT = '/media/hdc/KITTI/calib/data_object_calib/training/calib/'
+IMG_ROOT = '/home/subhash/sdc/lyft/kitti/validation/image_2/'
+PC_ROOT = '/home/subhash/sdc/lyft/kitti/validation/velodyne/'
+CALIB_ROOT = '/home/subhash/sdc/lyft/kitti/validation/calib/'
 
 
 
-for frame in range(0, 7481):
+for frame in range(5000, 7481):
     img_dir = IMG_ROOT + '%06d.png' % frame
     pc_dir = PC_ROOT + '%06d.bin' % frame
     calib_dir = CALIB_ROOT + '%06d.txt' % frame
 
     points = align_img_and_pc(img_dir, pc_dir, calib_dir)
     
-    output_name = PC_ROOT + frame + '.bin'
+    output_name = PC_ROOT + str(frame) + '.bin'
     points[:,:4].astype('float32').tofile(output_name)
 
 

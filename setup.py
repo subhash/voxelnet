@@ -10,9 +10,11 @@
 
 from distutils.core import setup
 from Cython.Build import cythonize
+import numpy as np
 
 setup(
     name='box overlaps',
+    include_dirs = [np.get_include()],         # <---- New line
     ext_modules=cythonize('./utils/box_overlaps.pyx')
 )
 
